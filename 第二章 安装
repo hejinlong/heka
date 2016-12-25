@@ -30,12 +30,16 @@ hekad基于Go运行环境，编译执行。编译脚本确保能够找到正确�
 
 2.3编译说明
 1.	下载heka分支:
->git clone https://github.com/mozilla-services/heka
+```Ruby
+git clone https://github.com/mozilla-services/heka
+```
 
 2.	在heka目录中的源代码（Unix-y）或运行（Windows）构建脚本：
->cd heka
->source build.sh#Unix（或`.build.sh`;必须来源于正确设置的环境）
->build.bat#Windows
+```Ruby
+cd heka
+source build.sh#Unix（或`.build.sh`;必须来源于正确设置的环境）
+build.bat#Windows
+```
 现在在build/heka/bin目录下有hekad二进制文件
 
 3.	(选择项)运行测试，确保hekad功能正常。
