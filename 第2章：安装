@@ -1,0 +1,85 @@
+第2章：安装
+2.1二进制文件
+hekad的发行版本Github页面，二进制文件支持Linux和OSX系统，提供Debian的相关软件包和基于RPM分布。
+2.2源码安装
+hekad基于Go运行环境，编译执行。编译脚本确保能够找到正确的依赖包。执行二进制文件需要平台满足一些先决条件。其中许多是流行的Unix发行标准和可以在Windows系统中安装。
+基本条件(所有系统):
+•	CMake3.0.0或更高版本http://www.cmake.org/cmake/resources/software.html
+•	Githttp://git-scm.com/download
+•	Go1.4或更高版本http://golang.org/dl/
+•	Mercurialhttp://mercurial.selenic.com/wiki/Download
+•	Protobuf2.3或更高版本(可选-仅在message.proto被修改时使用) http://code.google.com/p/protobuf/downloads/list
+•	Sphinx(可选-用来生成文档)http://sphinx-doc.org/
+•	互联网访问获取子模块
+基本条件(Unix):
+•	CA certificates(大多数可能已经通过ca-certificates安装)
+•	make
+•	gcc和libc6 开发标头(glibc-devel或libc6-dev包)
+•	patch
+•	GeoIP开发文件(可选)
+•	dpkg,debhelper和fakeroot(可选)
+•	rpmbuild(可选)
+•	packagemaker(可选)
+基本条件(Windows):
+•	MinGW http://sourceforge.net/projects/tdm-gcc/
+2.3编译说明
+1.	下载heka分支:
+git clone https://github.com/mozilla-services/heka
+2.	在heka目录中的源代码（Unix-y）或运行（Windows）构建脚本：
+cd heka
+source build.sh#Unix（或`.build.sh`;必须来源于正确设置的环境）
+build.bat#Windows
+现在在build/heka/bin目录下有hekad二进制文件
+3.	(选择项)运行测试，确保hekad功能正常。
+ctest#All,seenote
+#或makefile目标
+make test#Unix
+mingw32-make test#Windows
+注意
+
+除了标准测试构建目标，可以直接调用ctest，对正在运行的测试和生成的输出提供更多的控制（参见ctest-help）。即“ctest-Rpi”将只运行流水线单元测试。
+4.	运行makeinstall来安装可用路径下的库和模块。
+make install#Unix
+mingw32-make install#Windows
+这将把所有Heka的所需支持库，模块和其他文件安装到可用的sharedir中，路径如下：
+/path/to/heka/repo/heka/share/heka
+5.	指定Heka配置:
+当设置Heka配置，确保share_dir全局变量为以上路径。[hekad]部分如下:
+[hekad]
+maxprocs=4
+share_dir="/path/to/heka/repo/heka/share/heka"
+2.4清理目标
+•	clean-heka-无论何时更改分支或从Heka存储库中拉取，都将使用此目标，这将确保Go工作空间与存储库树同步。
+•	clean-你永远不会想使用这个目标（它是由cmake自动生成的），它将导致所有外部依赖关系重新获取和重新构建。“clean-all”的最好方法是删除构建目录并重新运行构建（sh|bat）脚本。
+2.5编译选项
+有两个构建自定义选项可以在cmake生成过程中指定。
+•	INCLUDE_MOZSVC(bool)包括Mozilla服务插件（默认Unix:true，Windows:false）。
+•	BENCHMARK(bool)启用基准测试（默认false）。
+例如：要在标准单元测试之外启用基准测试，请在构建目录中键入“cmake-BENCHMARK=true”。
+2.6编译hekad外部插件
+可以通过用Go语言编写输入、解码器、过滤器或输出插件来扩展hekad（参见Heka扩展）。因为Go只支持Go代码的静态链接，所以你的插件必须包含在Heka中并在编译时注册到Heka。构建过程是通过使用可选的cmake文件{hekaroot}/cmake/plugin_loader.cmake来支持。已经提供了一个cmake函数add_external_plugin取得仓库类型（git，svn或hg），仓库URL，要提取的仓库标签以及需要初始化的子包可选列表。
+add_external_plugin(git https://github.com/mozilla-services/heka-mozsvc-plugins6fe574dbd32a21f5d5583608a9d2339925edd2a7)
+add_external_plugin(git https://github.com/example/path<tag>utilfilepath)
+add_external_plugin(git https://github.com/bellycard/heka-sns-input:local)
+#The':local'tagisaspecialcase,itcopies{hekaroot}/externals/{plugin_name}intotheGo
+#workenvironmenteverytime`make`isrun.Whenlocaldevelopmentiscomplete,andthesource
+#ischeckedin,thevaluecansimplybechangedtothecorrecttagtomakeit'live'.
+#i.e.{hekaroot}/externals/heka-sns-input->{hekaroot}/build/heka/src/github.com/bellycard/heka-sns-input
+前面的条目将heka-mozsvc-plugins git存储库克隆到Go工作环境中，检出SHA6fe574dbd32a21f5d5583608a9d2339925edd2a7，并在make运行时将包导入hekad。通过在包中添加init()函数，你可以调用intopipeline.RegisterPlugin，使用Heka的配置系统注册你的插件。
+2.7创建包
+在系统上安装软件包通常是部署hekad的最简单的方法。按照以上源码指向这些包可以很容易地创建：
+1.运行cpack为当前系统构建适当的软件包：cpack
+
+makepackage#Unix(nodeb,seebelow)
+makedeb#Unix(ifdpkgisavailableseebelow)
+mingw32-makepackage#Windows
+这些包将在build目录中创建。
+注意
+
+需要安装rpmbuild来构建rpms。
+也可以参考
+设置rpm-build环境
+注意
+由于文件名惯例的原因，deb软件包不会通过运行cpack或makepackage来创建，即使在安装了/dev/dpkg的Unix机器上。相反，在这样的机器上运行源代码build.sh将生成一个带有单独“deb”标志的Makefile，因此你可以运行makedeb来生成适当的deb包。此外，你可以在软件包版本中添加后缀，例如：
+CPACK_DEBIAN_PACKAGE_VERSION_SUFFIX=+deb8makedeb
+
