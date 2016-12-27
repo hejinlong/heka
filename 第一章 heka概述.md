@@ -67,7 +67,9 @@ Heka管道中的组件，它接受消息并将它们传送到适当的过滤器�
 1.3 hekad
 ------
 Heka系统的核心是hekad守护进程。单个hekad进程可以配置任何数量的插件，同时执行各种数据采集、处理、和传输任务。关于如何配置一个hekad守护进程的细节请参考配置hekad部分。
+
 hekad命令行选项
+
 `-version`
 输出版本号。
 `-config config_path`
