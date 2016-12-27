@@ -3,17 +3,17 @@
 1.1介绍
 ------
 Heka是Mozilla开发的一个开源的流式处理软件系统。Heka在数据处理工具中号称“瑞士军刀”，其用处广泛，例如：
-*加载和解析文件系统中的日志文件。
-*接受statsd类型的聚合数据，以及转发上游的时序数据存储到graphite或InfluxDB。
-*启动外部进程收集本地系统操作数据。
-*通过Heka管道实现任何数据的实时统计、分析和异常检测。
-*通过外部协议（如AMQP）或直接TCP来传输数据。
-*处理数据实现多个持久存储。
+* 加载和解析文件系统中的日志文件。
+* 接受statsd类型的聚合数据，以及转发上游的时序数据存储到graphite或InfluxDB。
+* 启动外部进程收集本地系统操作数据。
+* 通过Heka管道实现任何数据的实时统计、分析和异常检测。
+* 通过外部协议（如AMQP）或直接TCP来传输数据。
+* 处理数据实现多个持久存储。
 以下是处理问题的学习资源:
-*邮件列表：https://mail.mozilla.org/listinfo/heka
-*问题跟踪：https://github.com/mozilla-services/heka/issues
-*Github项目：https://github.com/mozilla-services/heka/
-*IRC：#irc.mozilla.orgheka频道
+* 邮件列表：https://mail.mozilla.org/listinfo/heka
+* 问题跟踪：https://github.com/mozilla-services/heka/issues
+* Github项目：https://github.com/mozilla-services/heka/
+* IRC：#irc.mozilla.orgheka频道
 
 Heka是一个重量级插件为基础的系统。通过插件可以实现普通操作如数据流入、处理和输出。Heka运行众多插件执行常见的任务。下面是6种不同类型的Heka插件。
 Inputs（输入）
