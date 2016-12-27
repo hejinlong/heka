@@ -16,53 +16,52 @@ Heka是Mozilla开发的一个开源的流式处理软件系统。Heka在数据�
 * IRC：#irc.mozilla.orgheka频道
 
 Heka是一个重量级插件为基础的系统。通过插件可以实现普通操作如数据流入、处理和输出。Heka运行众多插件执行常见的任务。下面是6种不同类型的Heka插件。
-Inputs（输入）
+
+###### Inputs（输入）
 输入插件从外部获取数据并且注入到Heka管道。它们可以读取文件系统中的文件，从远程服务器积极建立网络连接获取数据，监听网络端口输入外部行为数据，在本地系统运行进程来收集数据。
 输入插件必须用Go语言写。
-Splitters（分割器）
+###### Splitters（分割器）
 分割器插件接收到输入插件获取的数据，且分割成单个数据记录。分割器插件必须用Go语言写。
-Decoders（解码器）
+###### Decoders（解码器）
 解码器插件把输入插件的数据转化成Heka内部消息数据结构。典型的解码器负责解析任何数据，反序列化、或者非结构化数据提取。
 解码器插件完全可以用Go编写。或者核心逻辑用沙箱中的Lua代码编写。
-Filters（过滤器）
+###### Filters（过滤器）
 过滤器插件是Heka的处理引擎。它通过匹配固定的特殊字符接收消息(使用Heka的消息匹配语法)以及能够执行数据监控、聚合和处理数据。过滤器也能生成新的消息重新注入到Heka管道，如汇总数据和可疑异常状况下通知消息，或者在Heka的仪表盘中展示真实的图形化缓存数据。
 过滤器可以用Go语言编写，或者核心逻辑可以用沙箱中的Lua代码编写。用Lua编写的过滤器插件不需要重新编译和重新启动Heka进程，甚至在Heka运行中直接执行。
-Encoders（编码器）
+###### Encoders（编码器）
 编码器插件是解码器插件逆向操作。它从Heka消息结构中生成任意字节流。编码器嵌入到输出插件中，处理序列，处理输出外部交互细节。
 编码器插件完全可以用Go语言编写，或者核心逻辑用沙箱中的Lua代码编写。
-Outputs（输出）
+###### Outputs（输出）
 输出插件将编码器序列化的数据发送到外部。它处理网络、文件系统或者任何外部资源的交互细节。就像过滤器，使用Heka的消息匹配器语法匹配特殊字符来接收和发送消息。
 输出插件必须用Go语言编写。
 关于用Go语言开发插件的内容请参考Heka扩展这部分。关于应用Lua沙箱开发解析插件、过滤插件和编码器插件的细节内容请参考沙箱部分。http://hekad.readthedocs.io/en/v0.10.0/sandbox/index.html
 
 1.2术语表
 ------
-hekad
+###### hekad
 后台程序，将消息通过路由输入和输出，并应用配置中的过滤器。
-Message（消息）
+###### Message（消息）
 消息是Hekad处理数据的原子单位。它是与在外部世界中发生的单个事件相关的数据结构，诸如日志文件条目，计数器递增，应用异常，通知消息等。它在heka/message包中被指定为消息结构message.go文件。
-Messagematcher（消息匹配器）
+###### Messagematcher（消息匹配器）
 过滤器和输出插件的配置选项，用于指定插件接受处理的消息。Heka路由器将针对每个消息来评估消息匹配器，并且当确定匹配时将传送消息。
-Pipeline（管道）
+###### Pipeline（管道）
 Hekad处理的消息通过一组特定的插件传送。要应用于消息的一组插件通常称为（有些非正式地）Heka管道。
-
-PipelinePack
+###### PipelinePack
 除了核心消息数据，Hekad需要跟踪每个消息的一些相关状态和配置信息。为此，在heka/pipeline包的pipeline_runner.go文件中定义了一个PipelinePack结构。PipelinePack对象是当消息流过管道时传送到各种Hekad插件的对象。
-
-Plugin（插件）
+###### Plugin（插件）
 Hekad插件是对消息执行特定操作的功能单元。有六种类型的插件：输入、分割器、解码器、过滤器、编码器和输出。
 
-PluginChanSize
+###### PluginChanSize
 Heka配置设置，指定各种Heka插件的输入通道缓冲区大小。默认值为50。
-PluginHelper
+###### PluginHelper
 一个接口，提供对插件在其活动过程中可能需要的某些Heka内部的访问。在config.go中定义。
-PluginRunner
+###### PluginRunner
 特定于插件的帮助对象，用于管理给定插件的生命周期，并处理与Heka环境交互的大多数细节。有五个主体，每个都适合于特定的插件类型：InputRunner，SplitterRunner，DecoderRunner，FilterRunner和OutputRunner。
 
-PoolSize
+###### PoolSize
 Heka配置设置，指定将创建PipelinePack结构的数量。此值指定Heka可以在任何时间处理传入的最大邮件数。
 
-Router
+###### Router
 Heka管道中的组件，它接受消息并将它们传送到适当的过滤器和输出插件，如插件所指定的消息匹配器值。
 
 1.3 hekad
