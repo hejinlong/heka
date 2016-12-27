@@ -3,17 +3,18 @@
 1.1介绍
 ------
 Heka是Mozilla开发的一个开源的流式处理软件系统。Heka在数据处理工具中号称“瑞士军刀”，其用处广泛，例如：
-•	加载和解析文件系统中的日志文件。
-•	接受statsd类型的聚合数据，以及转发上游的时序数据存储到graphite或InfluxDB。
-•	启动外部进程收集本地系统操作数据。
-•	通过Heka管道实现任何数据的实时统计、分析和异常检测。
-•	通过外部协议（如AMQP）或直接TCP来传输数据。
-•	处理数据实现多个持久存储。
+*加载和解析文件系统中的日志文件。
+*接受statsd类型的聚合数据，以及转发上游的时序数据存储到graphite或InfluxDB。
+*启动外部进程收集本地系统操作数据。
+*通过Heka管道实现任何数据的实时统计、分析和异常检测。
+*通过外部协议（如AMQP）或直接TCP来传输数据。
+*处理数据实现多个持久存储。
 以下是处理问题的学习资源:
-•	邮件列表：https://mail.mozilla.org/listinfo/heka
-•	问题跟踪：https://github.com/mozilla-services/heka/issues
-•	Github项目：https://github.com/mozilla-services/heka/
-•	IRC：#irc.mozilla.orgheka频道
+*邮件列表：https://mail.mozilla.org/listinfo/heka
+*问题跟踪：https://github.com/mozilla-services/heka/issues
+*Github项目：https://github.com/mozilla-services/heka/
+*IRC：#irc.mozilla.orgheka频道
+
 Heka是一个重量级插件为基础的系统。通过插件可以实现普通操作如数据流入、处理和输出。Heka运行众多插件执行常见的任务。下面是6种不同类型的Heka插件。
 Inputs（输入）
 输入插件从外部获取数据并且注入到Heka管道。它们可以读取文件系统中的文件，从远程服务器积极建立网络连接获取数据，监听网络端口输入外部行为数据，在本地系统运行进程来收集数据。
@@ -35,6 +36,7 @@ Outputs（输出）
 关于用Go语言开发插件的内容请参考Heka扩展这部分。关于应用Lua沙箱开发解析插件、过滤插件和编码器插件的细节内容请参考沙箱部分。http://hekad.readthedocs.io/en/v0.10.0/sandbox/index.html
 
 1.2术语表
+------
 hekad
 后台程序，将消息通过路由输入和输出，并应用配置中的过滤器。
 Message（消息）
@@ -64,6 +66,7 @@ Router
 Heka管道中的组件，它接受消息并将它们传送到适当的过滤器和输出插件，如插件所指定的消息匹配器值。
 
 1.3 hekad
+------
 Heka系统的核心是hekad守护进程。单个hekad进程可以配置任何数量的插件，同时执行各种数据采集、处理、和传输任务。关于如何配置一个hekad守护进程的细节请参考配置hekad部分。
 hekad命令行选项
 -version
