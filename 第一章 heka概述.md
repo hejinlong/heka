@@ -72,5 +72,6 @@ hekad命令行选项
 
 `-version`
 输出版本号。
+
 `-config config_path`
 指定应用的配置文件或目录名，默认是/etc/hekad.toml。如果config_path解析到一个目录，这个目录所有文件必须是可用的TOML文件。(参考hekad.config(5))
