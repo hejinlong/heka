@@ -4,4 +4,4 @@ heka 开发指南（中文版）
 
 何金龙
 Email: drupaluser@qq.com
-QQ:１９０３０２２５５
+QQ群：328576490
